@@ -1,3 +1,3 @@
 <template>
-  <div class="">Home page</div>
+  <div class="min-h-screen">Home page</div>
 </template>
