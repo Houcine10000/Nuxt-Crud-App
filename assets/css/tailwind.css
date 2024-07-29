@@ -12,4 +12,11 @@
   .label {
     @apply inline-block mb-1 text-sm text-gray-600
   }
+
+  .btn {
+    @apply px-4 py-2.5 text-sm flex items-center justify-center text-white rounded-md font-medium 
+    bg-gradient-to-tr from-orange-500 to-amber-400 hover:shadow-xl
+    hover:shadow-orange-500/30 hover:scale-[1.03]
+    focus:ring-4 focus:ring-orange-500/30 transition-all duration-300;
+  }
 }
