@@ -13,7 +13,7 @@
             <Icon
               name="fluent:search-24-regular"
               size="28"
-              class="text-gray-400"
+              class="text-gray-500"
             />
           </span>
 
