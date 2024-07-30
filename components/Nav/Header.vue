@@ -7,7 +7,7 @@
         <template v-for="n in menu" :key="`menuUtem${n.name}`">
           <nuxt-link
             :to="n.link"
-            class="px-3 py-2 text-sm font-medium text-gray-500 transition-all rounded-lg link hover:text-orange-500 hover:bg-orange-500"
+            class="px-3 py-2 text-sm font-medium text-gray-500 transition-all rounded-lg link hover:text-orange-500 hover:bg-orange-500/30"
             >{{ n.name }}</nuxt-link
           >
         </template>
