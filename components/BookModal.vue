@@ -9,19 +9,19 @@
         enter-from="opacity-0"
         leave-to="opacity-0"
       >
-        <div class="fixed inset-0 bg-black/30 backdrop-blur"></div>
+        <div class="fixed inset-0 bg-black/30 backdrop-blur" />
       </TransitionChild>
 
       <!-- Full-screen scrollable container -->
       <div class="fixed inset-0 overflow-y-auto">
-        <!-- container to center the panel -->
+        <!-- Container to center the panel -->
         <div class="flex items-center justify-center min-h-full p-4">
-          <!-- the actual dialog panel -->
+          <!-- The actual dialog panel -->
           <TransitionChild
             enter="duration-300 ease-out"
             enter-from="opacity-0 scale-95"
             enter-to="opacity-100 scale-100"
-            leave="duration-300 ease-in"
+            leave="duration-200 ease-in"
             leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95"
           >
@@ -30,11 +30,10 @@
             >
               <div class="flex items-center justify-between">
                 <!-- Conditional rendering for text -->
-                <DialogTitle class="text-xl font-medium text-gray-700">
-                  {{ book._id ? "update" : "create" }} Author
-                </DialogTitle>
+                <DialogTitle class="text-xl font-medium text-gray-700"
+                  >{{ book._id ? "Update" : "Create" }} Author</DialogTitle
+                >
               </div>
-
               <p class="mt-1 text-sm text-gray-500">
                 {{
                   book._id ? "Update this author" : "Create a new author here"
@@ -45,7 +44,6 @@
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div class="col-span-full">
                     <FormInput
-                      v-model="author.name"
                       rules="required"
                       label="Title"
                       type="text"
@@ -53,14 +51,12 @@
                       id="title"
                     />
                   </div>
-
                   <div class="mb-4 col-span-full">
-                    <FormAuthorInput v-model="author" />
+                    <FormAuthorInput v-model="authors" />
                   </div>
-
                   <div class="col-span-1">
                     <FormInput
-                      aria-placeholder="Select a date"
+                      placeholder="Select a date"
                       rules="required"
                       label="Published date"
                       type="date"
@@ -68,11 +64,9 @@
                       id="pub_date"
                     />
                   </div>
-
                   <div class="col-span-1">
                     <FormInput label="ISBN" type="text" name="isbn" id="isbn" />
                   </div>
-
                   <div class="col-span-1">
                     <FormInput
                       min="0"
@@ -93,7 +87,6 @@
                   >
                     Cancel
                   </button>
-
                   <button type="submit" class="btn">
                     {{ book._id ? "Update" : "Create" }}
                   </button>
@@ -121,40 +114,41 @@ const authorStore = useAuthorStore();
 useAsyncData(() => authorStore.getAll(), { initialCache: false });
 
 // instantiate book store
-const bookStroe = useBookStore();
-
+const bookStore = useBookStore();
+// Initial form values
 const book = ref({});
 const authors = ref([]);
 
-// Get function used to handle from submission and set init form values
+// Get function used to handle form submission and set init form values
 const { handleSubmit } = useForm({
-  initialValues: book.value,
+  initialValues: book,
 });
 
-// func used to update or create the record
+// Function used to update or create the record
 const submitBook = handleSubmit(async (values, ctx) => {
   if (!book.value._id) {
     // create author
-    await bookStroe.create({ ...values, authors: authors.value });
+    await bookStore.create({ ...values, authors: authors.value });
     closeModal();
   } else {
-    // update author
-    bookStroe.update(book.value._id, { ...values, authors: authors.value });
+    // Updated author
+    bookStore.update(book.value._id, { ...values, authors: authors.value });
     closeModal();
   }
 });
 
-// Control open/close state of modal
+// Controll state of teh modal
 const open = ref(false);
 const openModal = (item) => {
   // Set init values if an object is passed
-  if (item)
+  if (item) {
     book.value = JSON.parse(
       JSON.stringify({ ...item, published: item.published.substring(0, 10) })
     );
+    authors.value = item.authors.map((a) => a._id);
+  }
   open.value = true;
 };
-
 const closeModal = () => {
   book.value = {};
   authors.value = [];
@@ -167,3 +161,5 @@ defineExpose({
   closeModal,
 });
 </script>
+
+<style></style>

@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
-// Book schema
+// book schema
 const schema: mongoose.Schema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: true,
+      requied: true,
     },
 
     published: {
@@ -27,4 +27,6 @@ const schema: mongoose.Schema = new mongoose.Schema(
 
   { timestamps: true }
 );
+
+// book model
 export default mongoose.model("Book", schema);

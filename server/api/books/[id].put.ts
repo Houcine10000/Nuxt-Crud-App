@@ -1,8 +1,8 @@
-import BookModel from "~/server/models/Book.model";
-import { BookSchema } from "~/server/validation";
+import BookModel from "~~/server/models/Book.model";
+import { BookSchema } from "~~/server/validation";
 
 export default defineEventHandler(async (event) => {
-  // Get data from body
+  // Get data form body
   const body = await readBody(event);
 
   // Check if event.context.params is defined
@@ -15,12 +15,11 @@ export default defineEventHandler(async (event) => {
   // get id from params
   const id = event.context.params.id;
 
-  // validation
+  // validate
   let { error } = BookSchema.validate(body, {
     abortEarly: true,
     allowUnknown: true,
   });
-
   if (error) {
     throw createError({
       message: error.message.replace(/"/g, ""),
@@ -29,18 +28,14 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // create book
+  // Update book
   try {
     await BookModel.findByIdAndUpdate(id, body);
-    return { message: "Book updated" };
+    return { message: "Author updated" };
   } catch (e) {
     if (e instanceof Error) {
       throw createError({
         message: e.message,
-      });
-    } else {
-      throw createError({
-        message: "An unknown error occurred.",
       });
     }
   }

@@ -1,14 +1,14 @@
 import { defineStore } from "pinia";
-import { type IBook } from "~~/types";
+import type { IBook } from "~~/types";
 import useToast from "./useToast";
 
 export const useBookStore = defineStore("book-store", {
   state: () => ({
+    // List of all books
     books: [] as IBook[],
   }),
-
   actions: {
-    // Get all authors from DB
+    // Get all books from DB
     async getAll() {
       try {
         let data = await $fetch<IBook[]>("/api/books");
@@ -21,11 +21,11 @@ export const useBookStore = defineStore("book-store", {
       }
     },
 
-    // Create a new author
-    async create(name: string) {
+    // Create a new book
+    async create(book: IBook) {
       await $fetch("/api/books/create", {
         method: "POST",
-        body: { name },
+        body: book,
       })
         .catch((e) => {
           useToast().error(e.data.message);
@@ -36,11 +36,11 @@ export const useBookStore = defineStore("book-store", {
         });
     },
 
-    // Update an author
-    async update(id: string, name: string) {
+    // Update a book
+    async update(id: string, book: IBook) {
       await $fetch(`/api/books/${id}`, {
         method: "PUT",
-        body: { name },
+        body: book,
       })
         .catch((e) => {
           useToast().error(e.data.message);
@@ -51,7 +51,7 @@ export const useBookStore = defineStore("book-store", {
         });
     },
 
-    // delete an author
+    // delete a book
     async remove(id: string) {
       await $fetch(`/api/books/${id}`, {
         method: "DELETE",
