@@ -3,7 +3,7 @@ export interface IBook {
   title: string;
   isbn: string;
   pageCount: number;
-  publisched: string;
+  published: string;
   author: IAuthor;
 }
 

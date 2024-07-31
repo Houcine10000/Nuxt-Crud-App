@@ -1,12 +1,12 @@
-import AuthorModel from "~/server/models/Author.model";
-import { AuthorSchema } from "~/server/validation";
+import AuthorModel from "~~/server/models/Author.model";
+import { AuthorSchema } from "~~/server/validation";
 
-export default defineCachedEventHandler(async (event) => {
-  // Get data from body
+export default defineEventHandler(async (event) => {
+  // Get data form body
   const body = await readBody(event);
 
   // validate
-  let { error } = AuthorSchema.validate(body);
+  let { value, error } = AuthorSchema.validate(body);
   if (error) {
     throw createError({
       message: error.message.replace(/"/g, ""),
@@ -15,7 +15,7 @@ export default defineCachedEventHandler(async (event) => {
     });
   }
 
-  // create book
+  // create author
   try {
     await AuthorModel.create(body);
     return { message: "Author created" };
@@ -23,10 +23,6 @@ export default defineCachedEventHandler(async (event) => {
     if (e instanceof Error) {
       throw createError({
         message: e.message,
-      });
-    } else {
-      throw createError({
-        message: "An unknown error occurred.",
       });
     }
   }

@@ -1,21 +1,24 @@
-import AuthorModel from "~/server/models/Author.model";
+import AuthorModel from "~~/server/models/Author.model";
 
-export default defineCachedEventHandler(async (event) => {
-  // get id from params
+export default defineEventHandler(async (event) => {
+  // Check if event.context.params is defined
+  if (!event.context.params) {
+    throw createError({
+      message: "Params are missing in the event context",
+    });
+  }
+
+  // Get id from params
   const id = event.context.params.id;
 
-  // Remove book
+  // Remove author
   try {
-    await AuthorModel.findByIdAndUpdate(id);
+    await AuthorModel.findByIdAndDelete(id);
     return { message: "Author removed" };
   } catch (e) {
     if (e instanceof Error) {
       throw createError({
         message: e.message,
-      });
-    } else {
-      throw createError({
-        message: "An unknown error occurred.",
       });
     }
   }

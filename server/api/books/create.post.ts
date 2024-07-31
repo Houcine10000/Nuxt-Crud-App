@@ -1,7 +1,7 @@
 import BookModel from "~/server/models/Book.model";
 import { BookSchema } from "~/server/validation";
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   // Get data from body
   const body = await readBody(event);
 
@@ -23,10 +23,6 @@ export default defineCachedEventHandler(async (event) => {
     if (e instanceof Error) {
       throw createError({
         message: e.message,
-      });
-    } else {
-      throw createError({
-        message: "An unknown error occurred.",
       });
     }
   }

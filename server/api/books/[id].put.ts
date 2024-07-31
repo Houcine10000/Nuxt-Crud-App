@@ -1,9 +1,16 @@
 import BookModel from "~/server/models/Book.model";
 import { BookSchema } from "~/server/validation";
 
-export default defineCachedEventHandler(async (event) => {
+export default defineEventHandler(async (event) => {
   // Get data from body
   const body = await readBody(event);
+
+  // Check if event.context.params is defined
+  if (!event.context.params) {
+    throw createError({
+      message: "Params are missing in the event context",
+    });
+  }
 
   // get id from params
   const id = event.context.params.id;

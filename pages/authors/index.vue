@@ -6,30 +6,24 @@
       <p class="mt-2 text-sm text-gray-500">Manage your authors here</p>
 
       <div
-        class="flex flex-row items-center justify-between mt-5 space-y-3 md:space-y-0"
+        class="flex flex-col items-center justify-between mt-5 space-y-3 md:space-y-0 md:flex-row"
       >
         <div class="relative w-full md:mr-10 grow">
-          <span class="absolute -translate-y-1/3 top-5 left-3">
-            <Icon
-              name="fluent:search-24-regular"
-              size="28"
-              class="text-gray-500"
-            />
+          <span class="absolute -translate-y-1/2 top-1/2 left-3">
+            <Icon name="ep:search" size="24" class="text-gray-400" />
           </span>
-
           <input
-          placeholder="Search author..."
-            type="search"
+            placeholder="Search author..."
             v-model="search"
+            type="search"
             name="search"
             id="search"
             class="pl-11 input"
           />
         </div>
-
         <button
           @click="authorModal.openModal()"
-          class="w-fit py-3.5 md:py-2.5 md:w-auto btn shrink-0"
+          class="w-full py-3.5 md:py-2.5 md:w-auto btn shrink-0"
         >
           Add Author
         </button>
@@ -45,18 +39,16 @@
             :headers="headers"
             :items="authorStore.authors"
           >
-            <!-- Show authors -->
+            <!-- Show authors  -->
             <template #item-name="{ name }">
               <span class="font-semibold">{{ name }}</span>
             </template>
-
             <!-- Action items for table -->
             <template #item-actions="author">
               <div class="flex space-x-4 text-gray-500">
                 <button @click="authorModal.openModal(author)">
                   <Icon size="18" name="fluent:pen-24-regular" />
                 </button>
-
                 <button @click="removeAuthor(author)">
                   <Icon size="18" name="fluent:delete-24-regular" />
                 </button>
@@ -66,36 +58,37 @@
         </ClientOnly>
       </div>
     </main>
-
     <!-- Author modal comp -->
     <AuthorModal ref="authorModal" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { type Header } from "vue3-easy-data-table";
+  import type { Header } from "vue3-easy-data-table";
+  import type { IAuthor } from "~/types";
 
-// Author store
-const authorStore = useAuthorStore();
+  // Author store
+  const authorStore = useAuthorStore();
 
-// get data on page load
-useAsyncData(async () => await authorStore.getAll(), {
-  initialCache: false,
-});
+  // get data on page load
+  useAsyncData(async () => await authorStore.getAll(), {
+    // Remove in newer version of nuxt
+    // initialCache: false,
+  });
 
-// Modal ref
-const authorModal = ref();
-// search for author in table
-const search = ref("");
+  // Modal ref
+  const authorModal = ref();
+  //Search for author in table
+  const search = ref("");
 
-// Method used to remove an author
-const removeAuthor = async (author) => {
-  await authorStore.remove(author._id);
-};
+  // Method used to remove an author
+  const removeAuthor = async (author: IAuthor) => {
+    await authorStore.remove(author._id!);
+  };
 
-// Table headers
-const headers: Header[] = [
-  { text: "Author Name", value: "name", sortable: true },
-  { text: "Actions", value: "actions", width: 100 },
-];
+  // Table headers
+  const headers: Header[] = [
+    { text: "Author Name", value: "name", sortable: true },
+    { text: "Actions", value: "actions", width: 100 },
+  ];
 </script>
