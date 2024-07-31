@@ -1,14 +1,16 @@
 import mongoose from "mongoose";
 
-// Author schema
+// author schema
 const schema: mongoose.Schema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      requied: true,
     },
   },
 
   { timestamps: true }
 );
+
+// author model
 export default mongoose.model("Author", schema);
